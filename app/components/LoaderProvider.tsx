@@ -1,7 +1,7 @@
 "use client";
 
 import { createContext, useCallback, useContext, useEffect, useState } from "react";
-import { LoadingScreen } from "./LoadingScreen";
+import TaoLoader from "./TaoLoader";
 
 type Ctx = {
   show: boolean;
@@ -44,7 +44,7 @@ export function LoaderProvider({
 
   return (
     <LoaderCtx.Provider value={{ show, forceShow, hide }}>
-      <LoadingScreen show={show} onFinished={hide} />
+      <TaoLoader show={show} onFinished={hide} />
       {children}
     </LoaderCtx.Provider>
   );
