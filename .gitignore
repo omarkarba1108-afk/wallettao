@@ -13,3 +13,9 @@ npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-lock.yaml
+
+# Replit
+.replit
+.config/
+.upm/
+replit.nix
