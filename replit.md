@@ -27,12 +27,14 @@ Preferred communication style: Simple, everyday language.
 - **Client-Side Rendering**: Components using browser APIs (localStorage, window) are marked with `"use client"` directive and implement proper hydration strategies to prevent mismatches.
 
 ### Loading System Architecture
-The custom loading screen system demonstrates sophisticated client-side state management:
+The custom "Tao Swirl" loading screen system demonstrates sophisticated client-side state management:
 - **First Visit Detection**: Uses localStorage key `wallettao_seen_loader` to show loading animation only on first visit
 - **Auto-Hide Mechanism**: Configurable timeout (default 1.5s) automatically dismisses the loading screen
 - **Accessibility First**: Implements `role="status"`, `aria-busy`, `aria-live` attributes, and respects `prefers-reduced-motion` media query
-- **Animation System**: Features mirrored yin-yang dot morphing with horizontal/vertical stretching, glow effects via CSS drop-shadow, and smooth fade transitions (0.35s)
-- **Scroll Lock**: Prevents background scrolling while loading screen is visible
+- **Animation System**: Features a rotating yin-yang disc with S-curve seam, radial gradients (white/black halves), glowing dots with bloom filters, smooth scale/fade transitions, and gentle continuous rotation (2.4s duration, respects reduced motion)
+- **Scroll Lock**: Prevents background scrolling while loading screen is visible via useEffect cleanup
+- **Component Architecture**: TaoLoader handles rendering and animations, LoaderProvider manages state and first-visit logic
+- **Recent Changes** (October 27, 2025): Upgraded from split-screen stretching dots design to centered rotating yin-yang disc. Removed onFinished callback to prevent race conditions with forceShow() function.
 
 ### Theme System
 - **Dark/Light Mode Toggle**: Implements a persistent theme system that respects system preferences as fallback
