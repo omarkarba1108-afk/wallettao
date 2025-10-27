@@ -44,7 +44,7 @@ export function LoaderProvider({
 
   return (
     <LoaderCtx.Provider value={{ show, forceShow, hide }}>
-      <TaoLoader show={show} onFinished={hide} />
+      <TaoLoader show={show} />
       {children}
     </LoaderCtx.Provider>
   );
