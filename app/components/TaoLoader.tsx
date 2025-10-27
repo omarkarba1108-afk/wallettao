@@ -38,9 +38,7 @@ export default function TaoLoader({ show, onFinished }: { show: boolean; onFinis
   );
 }
 
-function YinYang({ reduceMotion }: { reduceMotion: boolean }) {
-  const spin = reduceMotion ? {} : { rotate: [0, 360], transition: { duration: 2.4, ease: "easeInOut", repeat: Infinity } };
-
+function YinYang({ reduceMotion }: { reduceMotion: boolean | null }) {
   return (
     <motion.div
       initial={{ scale: 0.92, opacity: 0 }}
@@ -50,7 +48,13 @@ function YinYang({ reduceMotion }: { reduceMotion: boolean }) {
       className="relative"
       style={{ width: 220, height: 220 }}
     >
-      <motion.svg viewBox="0 0 100 100" className="w-full h-full" style={{ filter: "drop-shadow(0 8px 24px rgba(0,0,0,0.18))" }} {...spin}>
+      <motion.svg 
+        viewBox="0 0 100 100" 
+        className="w-full h-full" 
+        style={{ filter: "drop-shadow(0 8px 24px rgba(0,0,0,0.18))" }}
+        animate={reduceMotion ? {} : { rotate: 360 }}
+        transition={reduceMotion ? {} : { duration: 2.4, ease: "easeInOut", repeat: Infinity }}
+      >
         <defs>
           <radialGradient id="gW" cx="50%" cy="50%">
             <stop offset="0%" stopColor="#ffffff" />
