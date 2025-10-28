@@ -10,7 +10,7 @@ import MobileNav from "./components/MobileNav";
 const fadeUp = { 
   initial: { opacity: 0, y: 10 }, 
   whileInView: { opacity: 1, y: 0 }, 
-  transition: { duration: 0.35, ease: "easeOut" }, 
+  transition: { duration: 0.35 }, 
   viewport: { once: true, margin: "-10% 0px" } 
 };
 

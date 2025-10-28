@@ -88,3 +88,22 @@ The custom "Tao Swirl" loading screen system demonstrates sophisticated client-s
   - Scripts updated: `dev` and `start` commands include `-p 5000 -H 0.0.0.0` flags
   - Deployment target: autoscale (for stateless Next.js applications)
   - .gitignore excludes Replit-specific files (.replit, .config/, .upm/, replit.nix)
+
+## Recent Changes
+
+### October 28, 2025: Site Redesign
+- **Complete redesign** from generic marketing page to clean, download-focused wallet extension landing
+- **New color scheme**: Jade (#00C2A8) for primary CTAs, neutral slate backgrounds
+- **New pages**:
+  - `/download` - Browser auto-detection for Chrome/Firefox/Edge installation
+  - `/developers` - EIP-1193 integration examples
+  - `/security` - Security principles, audit info, responsible disclosure
+  - `/support` - FAQ and contact options
+  - `/blog` - Placeholder blog listing
+- **Removed**: Pricing section and related marketing fluff
+- **New component**: InstallButtons with Chrome/Firefox/Edge CTAs
+- **Design system**: Minimal, glassy cards with soft borders, micro-motion (0.35s transitions)
+- **Navigation**: Consistent across all pages with active state highlighting
+
+### Known Issues
+- **Hydration mismatch warning**: Pre-existing console warning from ThemeToggle component's client-side localStorage check. Does not affect functionality - the theme toggle works correctly with proper server/client rendering separation.
