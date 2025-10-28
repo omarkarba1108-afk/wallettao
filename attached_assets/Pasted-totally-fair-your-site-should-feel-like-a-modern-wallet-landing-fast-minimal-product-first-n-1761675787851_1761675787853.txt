@@ -1,0 +1,334 @@
+totally fair. your site should feel like a modern **wallet landing**—fast, minimal, product-first. no pricing tables, no fluff. here’s a focused plan + a copy-paste prompt to refactor the site into a clean, conversion-oriented download page.
+
+---
+
+# What we’ll change (high level)
+
+**Keep**
+
+* Hero with crisp value prop + **Install for Chrome/Firefox/Edge** buttons.
+* Short features (3–4), real product benefits.
+* Security block (trust).
+* Screenshots/mockups of the extension UI.
+* Supported chains & wallets strip.
+* Devs link (EIP-1193).
+* FAQ (5–6 answers).
+* Footer.
+
+**Remove**
+
+* Pricing
+* Heavy marketing filler
+* Busy gradients/dated cards
+
+**Tone & visuals**
+
+* Neutral background, glassy cards, **1 brand color** for CTAs.
+* Micro-motion (0.25–0.4s), no wobble.
+* Clear hierarchy, lots of white space.
+
+---
+
+# One-shot Replit/Codex prompt (paste this)
+
+**Goal:** Redesign the site into a modern **download-focused** landing for a crypto wallet extension. Remove Pricing. Create crisp sections with strong CTAs and tasteful motion.
+
+**Do exactly this:**
+
+1. **Routes**
+
+* Keep only: `/` (Home), `/download`, `/developers`, `/security`, `/support`, `/blog` (placeholder list is fine).
+* Remove Pricing components/pages.
+
+2. **Theme & tokens**
+
+* Colors:
+
+  * `ink: #0B0B0C` (text/dark)
+  * `jade: #00C2A8` (primary)
+  * `slate-950 / slate-50` for backgrounds
+* Typography: Inter (700 for H1/H2, 400–500 body)
+* Corners: `rounded-2xl`
+* Shadows: soft (`shadow-lg/20`)
+* Motion: framer-motion, `easeOut`, `duration 0.25–0.4s`
+
+3. **Header**
+
+* Logo left, nav: Home, Download, Developers, Security, Blog, Support
+* Right side: “Download” button (primary)
+
+4. **Home `/app/page.tsx`** (replace content with these sections, minimal & clean):
+
+* **Hero** (above the fold)
+
+  * H1: “Own your keys. Flow like Tao.”
+  * Sub: “Self-custodial wallet for EVM chains—private, simple, fast.”
+  * Primary CTA buttons with icons: **Install for Chrome**, **Firefox**, **Edge** (placeholder links)
+  * Side visual: extension mockup (placeholder image in `/public/mockups/extension.png`)
+* **Features** (3–4 compact cards)
+
+  * Self-custody (keys never leave device)
+  * Human-readable signing (see what you sign)
+  * Built-in swaps (clear fees)
+  * Hardware wallet support
+* **Security**
+
+  * Bullets: local encryption, no tracking by default, optional telemetry, disclosure email
+  * Small metrics band: “0 custody • Human-readable signing • Open components”
+* **Screenshots / How it works**
+
+  * 3 steps with small screenshots: Install → Create/Import → Connect to dApps
+* **Supported chains strip**
+
+  * ETH, Polygon, Arbitrum, BSC (icon row)
+* **Social proof ribbon** (placeholder quotes or star rating)
+* **Final CTA** banner: “Start in under a minute” + same three install buttons
+
+5. **Download page `/app/download/page.tsx`**
+
+* Browser cards with UA auto-detect highlighting.
+* Copy link button; fallback instructions.
+
+6. **Developers `/app/developers/page.tsx`**
+
+* EIP-1193 snippet block (connect/sign/switch network).
+
+7. **Security `/app/security/page.tsx`**
+
+* Principles, audit placeholder, disclosure mailto, small FAQ.
+
+8. **FAQ component** with 5 Qs:
+
+* Seed phrase safety, restoring wallet, viewing transactions before signing, supported networks, privacy/telemetry.
+
+9. **Remove Pricing** from everywhere.
+
+10. **Implement hero & CTA components + motion**
+
+* Build `components/InstallButtons.tsx` with three buttons (Chrome/Firefox/Edge), each with icon, compact text, and gentle hover lift.
+* Add framer-motion fade/slide on section in-view.
+
+**Generate/replace these files (full content):**
+
+`components/InstallButtons.tsx`
+
+```tsx
+"use client";
+import { motion } from "framer-motion";
+import { Download } from "lucide-react";
+
+type Props = { size?: "sm" | "md" | "lg" };
+const links = {
+  chrome: "#",    // TODO: store links page
+  firefox: "#",
+  edge: "#",
+};
+
+export default function InstallButtons({ size = "md" }: Props) {
+  const cls = size === "lg" ? "px-5 py-3 text-base" : size === "sm" ? "px-3 py-2 text-sm" : "px-4 py-2";
+  const Btn = ({ label, href }: { label: string; href: string }) => (
+    <motion.a
+      href={href}
+      whileHover={{ y: -2 }}
+      whileTap={{ y: 0 }}
+      className={`inline-flex items-center gap-2 rounded-xl bg-[var(--cta,#00C2A8)] text-white ${cls} shadow-lg/20`}
+    >
+      <Download className="h-4 w-4" />
+      <span>{label}</span>
+    </motion.a>
+  );
+  return (
+    <div className="flex flex-col sm:flex-row gap-3">
+      <Btn label="Install for Chrome" href={links.chrome} />
+      <Btn label="Install for Firefox" href={links.firefox} />
+      <Btn label="Install for Edge" href={links.edge} />
+    </div>
+  );
+}
+```
+
+`app/page.tsx` (replace body with this structure)
+
+```tsx
+import Image from "next/image";
+import InstallButtons from "@/components/InstallButtons";
+import { motion } from "framer-motion";
+
+const fadeUp = { initial: { opacity: 0, y: 10 }, whileInView: { opacity: 1, y: 0 }, transition: { duration: 0.35, ease: "easeOut" }, viewport: { once: true, margin: "-10% 0px" } };
+
+export default function Home() {
+  return (
+    <main className="min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-50">
+      {/* HERO */}
+      <section className="px-6 py-24">
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-12 items-center">
+          <motion.div {...fadeUp}>
+            <h1 className="text-4xl sm:text-5xl font-bold tracking-tight">Own your keys. <span className="text-[#00C2A8]">Flow like Tao.</span></h1>
+            <p className="mt-4 text-lg text-slate-600 dark:text-slate-300">Self-custodial wallet for EVM chains—private, simple, and fast.</p>
+            <div className="mt-8"><InstallButtons size="lg" /></div>
+            <p className="mt-3 text-sm text-slate-500">Chrome, Firefox, and Edge supported. Mobile coming soon.</p>
+          </motion.div>
+
+          <motion.div {...fadeUp} className="relative">
+            <div className="relative mx-auto w-full max-w-md aspect-[4/3] rounded-2xl border border-white/10 bg-white/5 shadow-lg overflow-hidden">
+              <Image src="/mockups/extension.png" alt="WalletTao extension" fill className="object-cover" />
+            </div>
+          </motion.div>
+        </div>
+      </section>
+
+      {/* FEATURES */}
+      <motion.section {...fadeUp} className="px-6 py-16">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-2xl font-semibold">Why WalletTao</h2>
+          <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[
+              { t: "Self-custody, always", d: "Your keys never leave your device." },
+              { t: "See what you sign", d: "Human-readable signing prevents surprises." },
+              { t: "Built-in swaps", d: "Clear fees. Best route. No extra tabs." },
+              { t: "Hardware wallets", d: "Use Ledger/Trezor for extra safety." },
+            ].map((f) => (
+              <div key={f.t} className="rounded-2xl border border-slate-200/50 dark:border-white/10 p-5 bg-white/50 dark:bg-white/5 shadow-sm">
+                <h3 className="font-medium">{f.t}</h3>
+                <p className="mt-2 text-sm text-slate-600 dark:text-slate-300">{f.d}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </motion.section>
+
+      {/* SECURITY */}
+      <motion.section {...fadeUp} className="px-6 py-16">
+        <div className="max-w-7xl mx-auto grid lg:grid-cols-2 gap-10 items-start">
+          <div>
+            <h2 className="text-2xl font-semibold">Security you can trust</h2>
+            <ul className="mt-6 space-y-3 text-slate-600 dark:text-slate-300">
+              <li>• Locally encrypted keys. We never see your seed phrase.</li>
+              <li>• No tracking by default. Optional, privacy-safe telemetry.</li>
+              <li>• Human-readable transactions. See exactly what you approve.</li>
+              <li>• Responsible disclosure: <a className="underline" href="mailto:security@wallettao.app">security@wallettao.app</a></li>
+            </ul>
+          </div>
+          <div className="rounded-2xl border border-slate-200/50 dark:border-white/10 p-6 bg-white/50 dark:bg-white/5">
+            <p className="text-sm">Audits</p>
+            <div className="mt-3 grid sm:grid-cols-2 gap-4">
+              <div className="rounded-xl border border-slate-200/50 dark:border-white/10 p-4"><p className="text-xs text-slate-500">Firm</p><p className="font-medium">TBD</p></div>
+              <div className="rounded-xl border border-slate-200/50 dark:border-white/10 p-4"><p className="text-xs text-slate-500">Status</p><p className="font-medium">Planned</p></div>
+            </div>
+          </div>
+        </div>
+      </motion.section>
+
+      {/* HOW IT WORKS / SCREENSHOTS */}
+      <motion.section {...fadeUp} className="px-6 py-16">
+        <div className="max-w-7xl mx-auto">
+          <h2 className="text-2xl font-semibold">Get started in 3 steps</h2>
+          <div className="mt-8 grid md:grid-cols-3 gap-6">
+            {["Install the extension", "Create or import a wallet", "Connect to your favorite dApps"].map((t, i) => (
+              <div key={t} className="rounded-2xl border border-slate-200/50 dark:border-white/10 p-5 bg-white/50 dark:bg-white/5">
+                <div className="text-sm text-slate-500">Step {i + 1}</div>
+                <div className="mt-2 font-medium">{t}</div>
+                <div className="mt-3 h-32 rounded-xl bg-gradient-to-br from-slate-100 to-slate-200 dark:from-slate-800 dark:to-slate-700" />
+              </div>
+            ))}
+          </div>
+        </div>
+      </motion.section>
+
+      {/* CTA */}
+      <motion.section {...fadeUp} className="px-6 py-20">
+        <div className="max-w-7xl mx-auto rounded-2xl border border-slate-200/50 dark:border-white/10 p-10 bg-white/60 dark:bg-white/[0.04] text-center">
+          <h3 className="text-2xl font-semibold">Start in under a minute</h3>
+          <p className="mt-2 text-slate-600 dark:text-slate-300">Install WalletTao and take control of your keys.</p>
+          <div className="mt-6 flex justify-center"><InstallButtons /></div>
+        </div>
+      </motion.section>
+    </main>
+  );
+}
+```
+
+`app/download/page.tsx` (UA highlighting)
+
+```tsx
+"use client";
+import { useEffect, useState } from "react";
+import { Check } from "lucide-react";
+
+const CARDS = [
+  { key: "chrome",  name: "Chrome",  href: "#" },
+  { key: "firefox", name: "Firefox", href: "#" },
+  { key: "edge",    name: "Edge",    href: "#" },
+] as const;
+
+type Browser = typeof CARDS[number]["key"] | "other";
+
+export default function Download() {
+  const [browser, setBrowser] = useState<Browser>("other");
+  useEffect(() => {
+    const ua = navigator.userAgent.toLowerCase();
+    if (ua.includes("edg/")) setBrowser("edge");
+    else if (ua.includes("firefox")) setBrowser("firefox");
+    else if (ua.includes("chrome")) setBrowser("chrome");
+  }, []);
+
+  return (
+    <main className="min-h-screen bg-white dark:bg-slate-950 text-slate-900 dark:text-slate-50 px-6 py-16">
+      <div className="max-w-5xl mx-auto">
+        <h1 className="text-3xl font-semibold">Download WalletTao</h1>
+        <p className="mt-2 text-slate-600 dark:text-slate-300">Choose your browser to install the extension.</p>
+
+        <div className="mt-8 grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {CARDS.map(c => (
+            <a key={c.key} href={c.href}
+              className={`rounded-2xl border p-6 bg-white/60 dark:bg-white/[0.04] border-slate-200/50 dark:border-white/10 block ${browser===c.key ? "ring-2 ring-[#00C2A8]" : ""}`}>
+              <div className="flex items-center justify-between">
+                <div className="font-medium">{c.name} Extension</div>
+                {browser===c.key && <Check className="h-5 w-5 text-[#00C2A8]" />}
+              </div>
+              <div className="mt-2 text-sm text-slate-500">One-click install. Auto updates.</div>
+            </a>
+          ))}
+        </div>
+
+        <div className="mt-10">
+          <h2 className="text-xl font-semibold">Manual install</h2>
+          <ol className="mt-3 list-decimal pl-5 text-sm text-slate-600 dark:text-slate-300 space-y-1">
+            <li>Click your browser card above.</li>
+            <li>Approve the extension installation.</li>
+            <li>Pin WalletTao and open it from the toolbar.</li>
+          </ol>
+        </div>
+      </div>
+    </main>
+  );
+}
+```
+
+---
+
+## Copy you can use (short & clear)
+
+* **Hero:** “Own your keys. Flow like Tao.”
+  *Self-custodial wallet for EVM chains—private, simple, and fast.*
+
+* **Features:**
+  **Self-custody, always.** Your keys never leave your device.
+  **See what you sign.** Human-readable transactions reduce nasty surprises.
+  **Swap without the stress.** Best-route swaps with clear fees.
+  **Plays well with others.** Works with your favorite dApps across EVM chains.
+
+* **Security (bullets)** as in the code.
+
+* **CTA:** “Start in under a minute.”
+
+---
+
+## What to do next
+
+* Replace your home and download pages with these.
+* Delete the pricing section/components.
+* Keep the Tao loader you preferred.
+* When you have actual store links, drop them into `InstallButtons.tsx`.
+
+If you want, I’ll also give you a **polished header/footer** pair and a **super-simple docs index** so the whole site reads modern and product-led.
